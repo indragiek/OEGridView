@@ -27,7 +27,6 @@
 #import "OEGridView.h"
 #import "OEGridViewCell+OEGridView.h"
 #import "NSColor+OEAdditions.h"
-#import "OEMenu.h"
 #import <Carbon/Carbon.h>
 
 #define OERunningMountainLion (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_7)
@@ -1194,52 +1193,21 @@ const NSTimeInterval OEPeriodicInterval     = 0.075;    // Subsequent interval o
     [[self window] makeFirstResponder:self];
 }
 
-- (NSMenu *)menuForEvent:(NSEvent *)theEvent
+- (NSMenu*)menuForEvent:(NSEvent *)event
 {
-    [[self window] makeFirstResponder:self];
-    
-    NSPoint mouseLocationInWindow = [theEvent locationInWindow];
-    NSPoint mouseLocationInView   = [self convertPoint:mouseLocationInWindow fromView:nil];
-    
-    NSUInteger index = [self indexForCellAtPoint:mouseLocationInView];
-    if(index != NSNotFound && _dataSourceHas.menuForItemsAtIndexes)
-    {
-        BOOL            itemIsSelected      = [[self selectionIndexes] containsIndex:index];
-        OEGridViewCell *itemCell            = [self cellForItemAtIndex:index makeIfNecessary:YES];
-        NSIndexSet     *indexes             = itemIsSelected ? [self selectionIndexes] : [NSIndexSet indexSetWithIndex:index];
-
-        NSRect          hitRect             = NSInsetRect([itemCell hitRect], 5, 5);
-        NSRect          hitRectOnView       = [itemCell convertRect:hitRect toLayer:self.layer];
-        hitRectOnView.origin.y = self.bounds.size.height - hitRectOnView.origin.y - hitRectOnView.size.height;
-        NSRect          hitRectOnWindow     = [self convertRect:hitRectOnView toView:nil];
-        NSRect          visibleRectOnWindow = [self convertRect:[self visibleRect] toView:nil];
-        NSRect          visibleItemRect     = NSIntersectionRect(hitRectOnWindow, visibleRectOnWindow);
-        
-        if(!itemIsSelected) [self setSelectionIndexes:[NSIndexSet indexSetWithIndex:index]];
-        
-        OEMenu *contextMenu = [[self dataSource] gridView:self menuForItemsAtIndexes:indexes];
-        
-        if([[NSUserDefaults standardUserDefaults] boolForKey:UDLightStyleGridViewMenu]) [contextMenu setStyle:OEMenuStyleLight];
-        
-        [contextMenu setDisplaysOpenEdge:YES];
-        
-        OERectEdge edge = OEMaxXEdge;
-        if(NSHeight(visibleItemRect) < 25.0) 
-        {
-            edge = NSMinY(visibleItemRect) == NSMinY(visibleRectOnWindow) ? OEMaxYEdge : OEMinYEdge;
-            [contextMenu setAllowsOppositeEdge:NO];
-            
-            if(NSEqualRects(visibleItemRect, NSZeroRect))
-            {
-                visibleItemRect = hitRectOnWindow;
-            }
-        }     
-        [contextMenu openOnEdge:edge ofRect:visibleItemRect ofWindow:[self window]];
-        
-        return nil;
-    }
-    
-    return [self menu];
+	[[self window] makeFirstResponder:self];
+	NSPoint mouseLocationInWindow = [event locationInWindow];
+	NSPoint mouseLocationInView = [self convertPoint:mouseLocationInWindow fromView:nil];
+	NSUInteger index = [self indexForCellAtPoint:mouseLocationInView];
+	if(index != NSNotFound && _dataSourceHas.menuForItemsAtIndexes)
+	{
+		BOOL itemIsSelected = [[self selectionIndexes] containsIndex:index];
+		NSIndexSet* indexes = itemIsSelected ? [self selectionIndexes] : [NSIndexSet indexSetWithIndex:index];
+		if(!itemIsSelected)
+			[self setSelectionIndexes:[NSIndexSet indexSetWithIndex:index]];
+		return [[self dataSource] gridView:self menuForItemsAtIndexes:indexes];
+	}
+	return [self menu];
 }
 
 #pragma mark -
