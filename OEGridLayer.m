@@ -36,9 +36,30 @@
     {
         [self setLayoutManager:[OEGridViewLayoutManager layoutManager]];
         [self setNeedsDisplayOnBoundsChange:YES];
+        NSWindow *mainWindow = [NSApp mainWindow];
+        NSWindow *layerWindow = [[self view] window];
+        if (mainWindow || layerWindow) {
+            [self setContentsScale:[(layerWindow != nil) ? layerWindow : mainWindow backingScaleFactor]];
+        }
+        [super setDelegate:self];
     }
     
     return self;
+}
+
+#pragma mark - CALayer Delegate
+
+- (BOOL)layer:(CALayer *)layer shouldInheritContentsScale:(CGFloat)newScale
+   fromWindow:(NSWindow *)window
+{
+    return YES;
+}
+
+#pragma mark - Accessors
+
+- (void)setDelegate:(id)delegate
+{
+    
 }
 
 #pragma mark -
@@ -90,11 +111,6 @@
 {
     if(_interactive && CGRectContainsPoint([self frame], p)) return [super hitTest:p] ? : self;
     return nil;
-}
-
-- (void)layoutSublayers
-{
-    if([[self delegate] respondsToSelector:@selector(layoutSublayers)]) [[self delegate] layoutSublayers];
 }
 
 - (void)willMoveToSuperlayer:(OEGridLayer *)superlayer

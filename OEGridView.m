@@ -30,6 +30,8 @@
 #import "OEMenu.h"
 #import <Carbon/Carbon.h>
 
+#define OERunningMountainLion (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_7)
+
 const NSTimeInterval OEInitialPeriodicDelay = 0.4;      // Initial delay of a periodic events
 const NSTimeInterval OEPeriodicInterval     = 0.075;    // Subsequent interval of periodic events
 
@@ -123,11 +125,15 @@ const NSTimeInterval OEPeriodicInterval     = 0.075;    // Subsequent interval o
     {
         _rootLayer = [[OEGridLayer alloc] init];
         [_rootLayer setInteractive:YES];
-        [_rootLayer setGeometryFlipped:YES];
         [_rootLayer setLayoutManager:[OEGridViewLayoutManager layoutManager]];
         [_rootLayer setDelegate:self];
         [_rootLayer setAutoresizingMask:kCALayerWidthSizable | kCALayerHeightSizable];
         [_rootLayer setFrame:[self bounds]];
+        CGFloat scaleFactor = [[self window] backingScaleFactor];
+        if (!OERunningMountainLion) {
+            [_rootLayer setGeometryFlipped:YES];
+        }
+        [_rootLayer setContentsScale:scaleFactor];
 
         _dragIndicationLayer = [[OEGridLayer alloc] init];
         [_dragIndicationLayer setInteractive:NO];
@@ -135,6 +141,7 @@ const NSTimeInterval OEPeriodicInterval     = 0.075;    // Subsequent interval o
         [_dragIndicationLayer setBorderWidth:2.0];
         [_dragIndicationLayer setCornerRadius:8.0];
         [_dragIndicationLayer setHidden:YES];
+        [_dragIndicationLayer setContentsScale:scaleFactor];
         [_rootLayer addSublayer:_dragIndicationLayer];
 
         _fieldEditor = [[OEGridViewFieldEditor alloc] initWithFrame:NSMakeRect(50, 50, 50, 50)];
@@ -147,6 +154,14 @@ const NSTimeInterval OEPeriodicInterval     = 0.075;    // Subsequent interval o
     [layer addSublayer:_rootLayer];
 
     return layer;
+}
+
+#pragma mark - CALayer delegate
+
+- (BOOL)layer:(CALayer *)layer shouldInheritContentsScale:(CGFloat)newScale
+   fromWindow:(NSWindow *)window
+{
+    return YES;
 }
 
 #pragma mark -
