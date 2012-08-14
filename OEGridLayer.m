@@ -27,7 +27,7 @@
 #import "OEGridLayer.h"
 
 @implementation OEGridLayer
-
+@synthesize receivesHoverEvents = _receivesHoverEvents;
 @synthesize tracking = _tracking, interactive = _interactive;
 
 - (id)init
@@ -77,6 +77,18 @@
 {
 }
 
+- (void)mouseEnteredAtPointInCell:(NSPoint)point withEvent:(NSEvent *)theEvent
+{
+}
+
+- (void)mouseExitedAtPointInCell:(NSPoint)point withEvent:(NSEvent *)theEvent
+{
+}
+
+- (void)mouseMovedAtPointInCell:(NSPoint)point withEvent:(NSEvent *)theEvent
+{
+}
+
 #pragma mark -
 #pragma mark Dragging Operations
 
@@ -109,7 +121,11 @@
 
 - (CALayer *)hitTest:(CGPoint)p
 {
-    if(_interactive && CGRectContainsPoint([self frame], p)) return [super hitTest:p] ? : self;
+    if(!_interactive && !_receivesHoverEvents) return nil;
+    
+    if(CGRectContainsPoint([self frame], p))
+        return [super hitTest:p] ? : self;
+    
     return nil;
 }
 

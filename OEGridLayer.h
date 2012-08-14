@@ -35,6 +35,9 @@
 - (void)mouseDownAtPointInLayer:(NSPoint)point withEvent:(NSEvent *)theEvent;
 - (void)mouseUpAtPointInLayer:(NSPoint)point withEvent:(NSEvent *)theEvent;
 - (void)mouseMovedAtPointInLayer:(NSPoint)point withEvent:(NSEvent *)theEvent;
+- (void)mouseEnteredAtPointInCell:(NSPoint)point withEvent:(NSEvent *)theEvent;
+- (void)mouseExitedAtPointInCell:(NSPoint)point withEvent:(NSEvent *)theEvent;
+- (void)mouseMovedAtPointInCell:(NSPoint)point withEvent:(NSEvent *)theEvent;
 
 #pragma mark -
 #pragma mark Dragging Operations
@@ -55,7 +58,7 @@
 
 @property(nonatomic, getter=isTracking)    BOOL tracking;
 @property(nonatomic, getter=isInteractive) BOOL interactive;
-
+@property(nonatomic, assign) BOOL receivesHoverEvents;
 @property(nonatomic, readonly) NSWindow *window;
 @property(nonatomic, readonly) NSView   *view;
 
