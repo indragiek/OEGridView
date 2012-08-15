@@ -35,31 +35,14 @@
     if((self = [super init]))
     {
         [self setLayoutManager:[OEGridViewLayoutManager layoutManager]];
-        [self setNeedsDisplayOnBoundsChange:YES];
         NSWindow *mainWindow = [NSApp mainWindow];
         NSWindow *layerWindow = [[self view] window];
         if (mainWindow || layerWindow) {
             [self setContentsScale:[(layerWindow != nil) ? layerWindow : mainWindow backingScaleFactor]];
         }
-        [super setDelegate:self];
     }
     
     return self;
-}
-
-#pragma mark - CALayer Delegate
-
-- (BOOL)layer:(CALayer *)layer shouldInheritContentsScale:(CGFloat)newScale
-   fromWindow:(NSWindow *)window
-{
-    return YES;
-}
-
-#pragma mark - Accessors
-
-- (void)setDelegate:(id)delegate
-{
-    
 }
 
 #pragma mark -
@@ -109,6 +92,11 @@
 - (BOOL)performDragOperation:(id<NSDraggingInfo>)sender
 {
     return NO;
+}
+
+- (void)layoutSublayers
+{
+    if([[self delegate] respondsToSelector:@selector(layoutSublayers)]) [[self delegate] layoutSublayers];
 }
 
 #pragma mark -
