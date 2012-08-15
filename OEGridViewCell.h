@@ -50,5 +50,5 @@
 @property(nonatomic, readonly) OEGridView *gridView;
 @property(nonatomic, readonly) NSRect      hitRect;
 @property(nonatomic, readonly) id          draggingImage;
-
+@property(nonatomic, assign) BOOL highlighted;
 @end

@@ -35,7 +35,7 @@
 @end
 
 @implementation OEGridViewCell
-
+@synthesize highlighted = _highlighted;
 @synthesize selected=_selected;
 @synthesize editing=_editing;
 @synthesize foregroundLayer=_foregroundLayer;
