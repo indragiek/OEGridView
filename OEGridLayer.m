@@ -41,7 +41,6 @@
             [self setContentsScale:[(layerWindow != nil) ? layerWindow : mainWindow backingScaleFactor]];
         }
     }
-    
     return self;
 }
 
