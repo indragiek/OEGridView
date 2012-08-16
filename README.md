@@ -5,7 +5,7 @@ This is the unofficial repo for my fork of OEGridView, the high performance Core
 
 OEGridView doesn't have its own repository, so I copied the required source files and am hosting it in this repository with my own additions that I put in for use in the upcoming [Sonora 2.0](http://indragie.com).
 
-**The original source code was written mainly by [Enrique Osuna](https://github.com/riquedafreak) along with contributions from other members of the OpenEmu project. **
+**The original source code was written mainly by [Enrique Osuna](https://github.com/riquedafreak) along with contributions from other members of the OpenEmu project**
 
 I'm also putting in some documentation in here to help other people use it in their projects. 
 
