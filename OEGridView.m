@@ -336,7 +336,7 @@ const NSTimeInterval OEPeriodicInterval     = 0.075;    // Subsequent interval o
     const NSUInteger col = index % _cachedNumberOfVisibleColumns;
     const NSUInteger row = index / _cachedNumberOfVisibleColumns;
     
-    return NSMakeRect(floor(col * _cachedItemSize.width + _cachedColumnSpacing), floor(row * _cachedItemSize.height + _rowSpacing), _itemSize.width, _itemSize.height);
+    return NSMakeRect(floor(col * _cachedItemSize.width + _cachedColumnSpacing), floor(row * _cachedItemSize.height + (_rowSpacing / 2.f)), _itemSize.width, _itemSize.height);
 }
 
 #pragma mark -
@@ -502,7 +502,7 @@ const NSTimeInterval OEPeriodicInterval     = 0.075;    // Subsequent interval o
         }
         else
         {
-            contentSize.height = MAX(viewSize.height, ceil(numberOfRows * itemSize.height) + _rowSpacing);
+            contentSize.height = MAX(viewSize.height, ceil(numberOfRows * itemSize.height));
             [self OE_removeNoItemsView];
         }
         ++_supressFrameResize;
