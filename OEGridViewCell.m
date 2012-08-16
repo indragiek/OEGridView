@@ -72,11 +72,6 @@
     [CATransaction commit];
 }
 
-- (CALayer *)hitTest:(CGPoint)p
-{
-    return CGRectContainsPoint([self frame], p) ? self : nil;
-}
-
 - (void)prepareForReuse
 {
     [self setTracking:NO];
