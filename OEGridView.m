@@ -118,6 +118,8 @@ const NSTimeInterval OEPeriodicInterval     = 0.075;    // Subsequent interval o
         unsigned int validateDrop : 1;
         unsigned int draggingUpdated : 1;
         unsigned int acceptDrop : 1;
+        unsigned int magnifiedWithEvent : 1;
+        unsigned int magnifyEndedWithEvent : 1;
     } _delegateHas;                                 // Cached methods that the delegate implements
     
     struct
@@ -1298,6 +1300,23 @@ const NSTimeInterval OEPeriodicInterval     = 0.075;    // Subsequent interval o
 }
 
 #pragma mark -
+#pragma mark Touch Gestures
+
+- (void)magnifyWithEvent:(NSEvent *)event
+{
+    if (_delegateHas.magnifiedWithEvent) {
+        [_delegate gridView:self magnifiedWithEvent:event];
+    }
+}
+
+- (void)endGestureWithEvent:(NSEvent *)event
+{
+    if (_delegateHas.magnifyEndedWithEvent) {
+        [_delegate gridView:self magnifyEndedWithEvent:event];
+    }
+}
+
+#pragma mark -
 #pragma mark Keyboard Handling Operations
 
 - (void)OE_moveKeyboardSelectionToIndex:(NSUInteger)index
@@ -1581,6 +1600,8 @@ const NSTimeInterval OEPeriodicInterval     = 0.075;    // Subsequent interval o
         _delegateHas.validateDrop                    = [_delegate respondsToSelector:@selector(gridView:validateDrop:)];
         _delegateHas.draggingUpdated                 = [_delegate respondsToSelector:@selector(gridView:draggingUpdated:)];
         _delegateHas.acceptDrop                      = [_delegate respondsToSelector:@selector(gridView:acceptDrop:)];
+        _delegateHas.magnifiedWithEvent              = [_delegate respondsToSelector:@selector(gridView:magnifiedWithEvent:)];
+        _delegateHas.magnifyEndedWithEvent           = [_delegate respondsToSelector:@selector(gridView:magnifyEndedWithEvent:)];
     }
 }
 
