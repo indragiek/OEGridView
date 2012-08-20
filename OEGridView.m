@@ -800,14 +800,11 @@ const NSTimeInterval OEPeriodicInterval     = 0.075;    // Subsequent interval o
         [self setFrame:[[self enclosingScrollView] bounds]];
         [self OE_centerNoItemsView];
     }
-    else
+    const NSRect visibleRect = [[self enclosingScrollView] documentVisibleRect];
+    if(!NSEqualSizes(_cachedViewSize, visibleRect.size))
     {
-        const NSRect visibleRect = [[self enclosingScrollView] documentVisibleRect];
-        if(!NSEqualSizes(_cachedViewSize, visibleRect.size))
-        {
-            [self OE_cancelFieldEditor];
-            [self performSelector:@selector(OE_calculateCachedValuesAndQueryForDataChanges:) withObject:[NSNumber numberWithBool:NO] afterDelay:0.25];
-        }
+        [self OE_cancelFieldEditor];
+        [self OE_calculateCachedValuesAndQueryForDataChanges:NO];
     }
 }
 
